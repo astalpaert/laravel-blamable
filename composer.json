@@ -9,20 +9,42 @@
         "eloquent"
     ],
     "minimum-stability": "dev",
-    "autoload": {
-        "psr-4": {
-            "Astalpaert\\LaravelBlamable\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Arno Stalpaert",
             "email": "info@arnostalpaert.be"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Astalpaert\\LaravelBlamable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Astalpaert\\LaravelBlamable\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Astalpaert\\LaravelBlamable\\Providers\\BlamableServiceProvider"
+            ]
+        }
+    },
     "require": {
         "php": "^7.4|^8.0",
-        "illuminate/database": "^8.0|^9.0",
-        "illuminate/support": "8.0|^9.0"
+        "illuminate/database": "^7.0,^8.0|^9.0",
+        "illuminate/support": "^7.0,^8.0|^9.0",
+        "illuminate/auth": "^7.0,^8.0|^9.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.0|^6.0|^7.0",
+        "phpunit/phpunit": "^9.4"
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit"
+        ]
     }
 }
