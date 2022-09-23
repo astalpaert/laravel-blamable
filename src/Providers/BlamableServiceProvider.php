@@ -19,17 +19,20 @@ class BlamableServiceProvider extends ServiceProvider
         Blueprint::macro('addBlamableFields', function () {
             $tableName = $this->getTable();
 
-            if (!Schema::hasColumn($tableName, 'created_by')) {
-                $this->string('created_by')->after('created_at')->nullable();
-            }
+            $addBlamableColumnIfExists = function (string $columnToAdd, string $columnAddedAfter) use ($tableName) {
+                if (Schema::hasColumn($tableName, $columnToAdd)) {
+                    return;
+                }
 
-            if (!Schema::hasColumn($tableName, 'updated_by')) {
-                $this->string('updated_by')->after('updated_at')->nullable();
-            }
+                $column = $this->string($columnToAdd)->nullable();
+                if (Schema::hasColumn($tableName, $columnAddedAfter)) {
+                    $column->after($columnAddedAfter);
+                }
+            };
 
-            if (Schema::hasColumn($tableName, 'deleted_at') && !Schema::hasColumn($tableName, 'deleted_by')) {
-                $this->string('deleted_by')->after('deleted_at')->nullable();
-            }
+            $addBlamableColumnIfExists('created_by', 'created_at');
+            $addBlamableColumnIfExists('updated_by', 'updated_at');
+            $addBlamableColumnIfExists('deleted_by', 'deleted_at');
         });
 
         // down

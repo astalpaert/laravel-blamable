@@ -33,6 +33,6 @@ trait Blamable
      */
     public function usesSoftDeletes(): bool
     {
-        return in_array(SoftDeletes::class, class_uses($this));
+        return in_array(SoftDeletes::class, class_uses($this), true);
     }
 }
