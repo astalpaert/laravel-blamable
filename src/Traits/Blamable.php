@@ -8,21 +8,26 @@ trait Blamable
 {
     public static function bootBlamable()
     {
-        // @TODO make $user->name configurable
-        static::creating(function ($model) {
-            $user = optional(auth()->user())->name ?? 'SYSTEM';
+        $attributeName = config('astalpaert.blamable.configuration.user.attribute_name');
+        $defaultUser = config('astalpaert.blamable.configuration.user.default');
+
+        static::creating(function ($model) use ($attributeName, $defaultUser): void {
+            $user = optional(auth()->user())->$attributeName ?? $defaultUser;
+
             $model->created_by = $user;
             $model->updated_by = $user;
         });
 
-        static::updating(function ($model) {
-            $user = optional(auth()->user())->name ?? 'SYSTEM';
+        static::updating(function ($model) use ($attributeName, $defaultUser): void {
+            $user = optional(auth()->user())->$attributeName ?? $defaultUser;
+
             $model->updated_by = $user;
         });
 
-        static::deleting(function ($model) {
+        static::deleting(function ($model) use ($attributeName, $defaultUser): void {
             if ($model->usesSoftDeletes()) {
-                $user = optional(auth()->user())->name ?? 'SYSTEM';
+                $user = optional(auth()->user())->$attributeName ?? $defaultUser;
+
                 $model->deleted_by = $user;
             }
         });
