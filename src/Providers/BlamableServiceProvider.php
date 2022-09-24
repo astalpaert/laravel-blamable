@@ -12,7 +12,7 @@ class BlamableServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                ASTALPAERT_BLAMABLE_ROOT.'/config/astalpaert-blamable.php' => config_path('astalpaert-blamable.php'),
+                dirname(__DIR__, 2).'/config/astalpaert-blamable.php' => config_path('astalpaert-blamable.php'),
             ], 'config');
         }
 
@@ -60,10 +60,9 @@ class BlamableServiceProvider extends ServiceProvider
     {
         parent::register();
 
-        if (! defined('ASTALPAERT_BLAMABLE_ROOT')) {
-            define('ASTALPAERT_BLAMABLE_ROOT', realpath(dirname(__DIR__, 2)));
-        }
-
-        $this->mergeConfigFrom(ASTALPAERT_BLAMABLE_ROOT.'/config/astalpaert-blamable.php', 'astalpaert.blamable.configuration');
+        $this->mergeConfigFrom(
+            dirname(__DIR__, 2).'/config/astalpaert-blamable.php',
+            'astalpaert.blamable.configuration'
+        );
     }
 }
