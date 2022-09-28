@@ -10,6 +10,12 @@ class BlamableServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                dirname(__DIR__, 2).'/config/astalpaert-blamable.php' => config_path('astalpaert-blamable.php'),
+            ], 'config');
+        }
+
         $this->registerBlamableFieldMacros();
     }
 
@@ -51,5 +57,15 @@ class BlamableServiceProvider extends ServiceProvider
                 $this->dropColumn('deleted_by');
             }
         });
+    }
+
+    public function register()
+    {
+        parent::register();
+
+        $this->mergeConfigFrom(
+            dirname(__DIR__, 2).'/config/astalpaert-blamable.php',
+            'astalpaert.blamable.configuration'
+        );
     }
 }
