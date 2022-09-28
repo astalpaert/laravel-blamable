@@ -8,10 +8,10 @@ trait Blamable
 {
     public static function bootBlamable()
     {
-        $attributeName = config('astalpaert.blamable.configuration.user.attribute_name');
-        $defaultUser = config('astalpaert.blamable.configuration.user.default');
+        $attributeName = config('astalpaert.blamable.user.attribute_name');
+        $defaultUser = config('astalpaert.blamable.user.default');
 
-        static::creating(function ($model) use ($attributeName, $defaultUser): void {
+        static::creating(static function ($model) use ($attributeName, $defaultUser): void {
             $user = optional(auth()->user())->$attributeName ?? $defaultUser;
 
             $model->created_by = $user;
@@ -24,7 +24,7 @@ trait Blamable
             $model->updated_by = $user;
         });
 
-        static::deleting(function ($model) use ($attributeName, $defaultUser): void {
+        static::deleting(static function ($model) use ($attributeName, $defaultUser): void {
             if ($model->usesSoftDeletes()) {
                 $user = optional(auth()->user())->$attributeName ?? $defaultUser;
 
@@ -33,9 +33,6 @@ trait Blamable
         });
     }
 
-    /**
-     * @return bool
-     */
     public function usesSoftDeletes(): bool
     {
         return in_array(SoftDeletes::class, class_uses($this), true);

@@ -37,16 +37,22 @@ use Illuminate\Database\Eloquent\Model;
 class DummyModel extends Model
 {
     use Blamable;
+    //use SoftDeletes;
 }
 ```
 
 ## Configuration
 
 ### Implement User model
-Note the 'name' attribute is used as the blamable user. This will be configurable in future.
+Note the 'name' attribute is used as the default blamable user. This is configurable in the config under ```attribute_name```. 
+Make sure to provide an accessor in the model.
 ```
 public function getNameAttribute()
 {
     //
 }
 ```
+
+### Implement default value
+
+Note the value 'SYSTEM' is used as the default blamable user. This is configurable in the config under ```default```.
