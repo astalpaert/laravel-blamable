@@ -8,7 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 class BlamableServiceProviderTest extends TestCase
 {
     /** @test **/
-    public function it_has_registers_macros()
+    public function it_registers_macros()
     {
         $this->assertTrue(Blueprint::hasMacro('addBlamableFields'));
         $this->assertTrue(Blueprint::hasMacro('addBlamableFields'));

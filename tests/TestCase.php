@@ -35,8 +35,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function setupDatabase(): void
     {
-        include_once __DIR__.'/Support/Migrations/create_dummy_models_table.php.stub';
+        include_once __DIR__ . '/Support/Migrations/create_dummy_models_table.php.stub';
+        include_once __DIR__ . '/Support/Migrations/remove_blamable_fields.php.stub';
 
         (new \CreateDummyModelsTable())->up();
+        (new \RemoveBlamableFieldsTable())->up();
     }
 }
