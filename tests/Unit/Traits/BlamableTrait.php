@@ -4,6 +4,8 @@ namespace Astalpaert\LaravelBlamable\Tests\Unit\Traits;
 
 use Astalpaert\LaravelBlamable\Traits\Blamable;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 trait BlamableTrait
 {
@@ -18,10 +20,8 @@ trait BlamableTrait
         return new $class();
     }
 
-    /**
-     * @test
-     * @dataProvider configDataProvider
-     */
+    #[Test]
+    #[DataProvider('configDataProvider')]
     public function it_adds_created_by_when_creating($description, $defaultValue): void
     {
         Config::set('astalpaert.blamable.user.default', $defaultValue);
@@ -33,10 +33,9 @@ trait BlamableTrait
         $this->assertEquals($defaultValue, $instance->created_by);
     }
 
-    /**
-     * @test
-     * @dataProvider configDataProvider
-     */
+
+    #[Test]
+    #[DataProvider('configDataProvider')]
     public function it_adds_updated_by_when_updating($description, $defaultValue): void
     {
         Config::set('astalpaert.blamable.user.default', $defaultValue);
@@ -49,10 +48,9 @@ trait BlamableTrait
         $this->assertEquals($defaultValue, $instance->updated_by);
     }
 
-    /**
-     * @test
-     * @dataProvider configDataProvider
-     */
+
+    #[Test]
+    #[DataProvider('configDataProvider')]
     public function it_adds_deleted_by_when_deleting($description, $defaultValue): void
     {
         Config::set('astalpaert.blamable.user.default', $defaultValue);
@@ -67,7 +65,7 @@ trait BlamableTrait
         }
     }
 
-    public function configDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             ['default value', 'SYSTEM'],
