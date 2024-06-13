@@ -33,7 +33,6 @@ trait BlamableTrait
         $this->assertEquals($defaultValue, $instance->created_by);
     }
 
-
     #[Test]
     #[DataProvider('configDataProvider')]
     public function it_adds_updated_by_when_updating($description, $defaultValue): void
@@ -63,6 +62,20 @@ trait BlamableTrait
             $this->assertEquals($defaultValue, config('astalpaert.blamable.user.default'));
             $this->assertEquals($defaultValue, $instance->deleted_by);
         }
+    }
+
+    #[Test]
+    public function it_uses_given_name_instead_of_fetching_it_from_user(): void
+    {
+        $instance = $this->app[$this->getModelClass()]->create([
+            'created_by' => 'Ignace',
+            'updated_by' => 'Jean-Paul',
+            'deleted_by' => 'Arno',
+        ]);
+
+        $this->assertEquals('Ignace', $instance->created_by);
+        $this->assertEquals('Jean-Paul', $instance->updated_by);
+        $this->assertEquals('Arno', $instance->deleted_by);
     }
 
     public static function configDataProvider(): array
