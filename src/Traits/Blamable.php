@@ -2,6 +2,7 @@
 
 namespace Astalpaert\LaravelBlamable\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait Blamable
@@ -11,24 +12,34 @@ trait Blamable
         $attributeName = config('astalpaert.blamable.user.attribute_name');
         $defaultUser = config('astalpaert.blamable.user.default');
 
-        static::creating(static function ($model) use ($attributeName, $defaultUser): void {
+        static::creating(static function (Model $model) use ($attributeName, $defaultUser): void {
             $user = optional(auth()->user())->$attributeName ?? $defaultUser;
 
-            $model->created_by = $model->created_by ?? $user;
-            $model->updated_by = $model->updated_by ?? $user;
+            if (!$model->isDirty('created_by')) {
+                $model->created_by = $user;
+            }
+            if (!$model->isDirty('updated_by')) {
+                $model->updated_by = $user;
+            }
         });
 
         static::updating(function ($model) use ($attributeName, $defaultUser): void {
+            if ($model->isDirty('updated_by')) {
+                return;
+            }
             $user = optional(auth()->user())->$attributeName ?? $defaultUser;
 
-            $model->updated_by = $model->updated_by ?? $user;
+            $model->updated_by = $user;
         });
 
         static::deleting(static function ($model) use ($attributeName, $defaultUser): void {
             if ($model->usesSoftDeletes()) {
+                if ($model->isDirty('deleted_by')) {
+                    return;
+                }
                 $user = optional(auth()->user())->$attributeName ?? $defaultUser;
 
-                $model->deleted_by = $model->deleted_by ?? $user;
+                $model->deleted_by = $user;
             }
         });
     }
