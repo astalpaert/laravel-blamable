@@ -57,7 +57,7 @@ Et voilà! The package will fill the blamable columns automatically after creati
 To publish the config file to `config/astalpaert-blamable.php` run:
 
 ```sh
-php artisan vendor:publish --provider="Astalpaert\LaravelBlamable\Providers\BlameableServiceProvider"
+php artisan vendor:publish --provider="Astalpaert\LaravelBlamable\Providers\BlamableServiceProvider"
 ```
 
 ### Implement User model
